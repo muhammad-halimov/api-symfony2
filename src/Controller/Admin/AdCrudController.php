@@ -2,15 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Admin\Field\VichImageField;
+use App\Controller\Admin\Field\VichFileField;
 use App\Entity\Ad;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class AdCrudController extends AbstractCrudController
 {
@@ -23,9 +23,9 @@ class AdCrudController extends AbstractCrudController
     {
         return parent::configureCrud($crud)
             ->setEntityLabelInPlural('Реклама')
-            ->setEntityLabelInSingular('контент')
-            ->setPageTitle(Crud::PAGE_NEW, 'Добавление контента')
-            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение контента');
+            ->setEntityLabelInSingular('рекламу')
+            ->setPageTitle(Crud::PAGE_NEW, 'Добавление рекламы')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение рекламы');
     }
 
     public function configureFields(string $pageName): iterable
@@ -33,10 +33,16 @@ class AdCrudController extends AbstractCrudController
         yield IdField::new('id', 'ID')
             ->hideOnForm();
 
-        yield TextField::new('options', 'Настройки')
-            ->setColumns(5);
+        yield CollectionField::new('options', 'Настройки')
+            ->onlyOnForms()
+            ->useEntryCrudForm(AdSettingCrudController::class)
+            ->setColumns(8);
 
-        yield VichImageField::new('imageFile', 'Картинка')
+        yield TextEditorField::new('optionsToString', 'Настройки')
+            ->hideOnForm()
+            ->setColumns(8);
+
+        yield VichFileField::new('imageFile', 'Файл')
             ->setHelp('
                 <div class="mt-3">
                     <span class="badge badge-info">*.jpg</span>
@@ -50,6 +56,13 @@ class AdCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setColumns(8);
 
+        yield VichFileField::new('image', 'Файл')
+            ->hideOnForm()
+            ->setColumns(8);
+
         yield BooleanField::new('turnOn', 'Показывать');
+
+        yield DateTimeField::new('updatedAt', 'Обновлено')
+            ->hideOnForm();
     }
 }

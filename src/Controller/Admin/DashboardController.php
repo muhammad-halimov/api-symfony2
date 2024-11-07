@@ -57,11 +57,11 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Софт');
             yield MenuItem::linkToCrud('Обновления', 'fas fa-wrench', Updates::class);
-
-        yield MenuItem::section('Настройки');
+            yield MenuItem::section('Настройки');
             yield MenuItem::linkToUrl('API', 'fa fa-link', '/api')
                 ->setLinkTarget('_blank')
                 ->setPermission('ROLE_ADMIN');
             yield MenuItem::linkToCrud('Пользователи', 'fa fa-users', User::class);
     }
 }
+

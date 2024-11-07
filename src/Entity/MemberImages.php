@@ -23,7 +23,7 @@ class MemberImages
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('member:read')]
+    #[Groups(['tenant:read', 'member:read'])]
     private ?int $id = null;
 
     #[Vich\UploadableField(mapping: 'member_images', fileNameProperty: 'image')]
@@ -31,7 +31,7 @@ class MemberImages
     private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+    #[Groups(['tenant:read', 'member:read'])]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]

@@ -4,11 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichImageField;
 use App\Entity\Tenant;
-use App\Repository\CategoryRepository;
-use App\Repository\FloorRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -22,28 +20,7 @@ class TenantCrudController extends AbstractCrudController
         return Tenant::class;
     }
 
-    public function __construct(
-        private readonly CategoryRepository $categoryRepository,
-        private readonly FloorRepository $floorRepository,
-    ){}
-
-    private function getFloors(): array
-    {
-        $floors = $this->floorRepository->findAll();
-        return array_combine(
-            array_map(function ($floor) { return $floor->getFloor(); }, $floors),
-            array_map(function ($floor) { return $floor->getId(); }, $floors)
-        );
-    }
-
-    private function getCategories(): array
-    {
-        $categories = $this->categoryRepository->findAll();
-        return array_combine(
-            array_map(function ($category) { return $category->getTitle(); }, $categories), // Предположим, что у вас есть метод getTitle()
-            array_map(function ($category) { return $category->getId(); }, $categories) // Получаем идентификаторы категорий
-        );
-    }
+    public function __construct(){}
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -63,20 +40,20 @@ class TenantCrudController extends AbstractCrudController
             ->setRequired(true)
             ->setColumns(2);
 
-        yield ChoiceField::new('floor', 'Этаж')
-            ->setColumns(2)
-            ->setChoices($this->getFloors());
+        yield AssociationField::new('category', 'Категории')
+            ->setColumns(2);
 
-        yield ChoiceField::new('category', 'Категории')
-            ->setColumns(2)
-            ->setChoices($this->getCategories());
+        yield AssociationField::new('floor', 'Этажи')
+            ->setColumns(2);
 
         yield TextField::new('phone', 'Телефон')
-            ->setColumns(2);
+            ->setColumns(2)
+            ->onlyOnForms();
 
         yield TextEditorField::new('description', 'Описание')
             ->setRequired(true)
-            ->setColumns(8);
+            ->setColumns(8)
+            ->onlyOnForms();
 
         yield VichImageField::new('imageFile', 'Логотип')
             ->setHelp('

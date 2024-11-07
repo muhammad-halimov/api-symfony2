@@ -6,6 +6,7 @@ use App\Controller\Admin\Field\VichImageField;
 use App\Entity\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -21,7 +22,7 @@ class CategoryCrudController extends AbstractCrudController
     {
         return parent::configureCrud($crud)
             ->setEntityLabelInPlural('Категории')
-            ->setEntityLabelInSingular('контент')
+            ->setEntityLabelInSingular('катергорию')
             ->setPageTitle(Crud::PAGE_NEW, 'Добавление категории')
             ->setPageTitle(Crud::PAGE_EDIT, 'Изменение категории');
     }
@@ -52,6 +53,10 @@ class CategoryCrudController extends AbstractCrudController
         yield VichImageField::new('image', 'Картинка')
             ->hideOnForm()
             ->setColumns(8);
+
+        yield CollectionField::new('tenant', 'Арендаторы')
+            ->onlyOnIndex()
+            ->useEntryCrudForm(TenantCrudController::class);
 
         yield DateTimeField::new('updatedAt', 'Обновлено')
             ->hideOnForm();

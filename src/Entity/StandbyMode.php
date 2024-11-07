@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\StandbyModeRepository;
 use DateTime;
@@ -13,7 +15,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StandbyModeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ],
+    paginationEnabled: false,
+)]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class StandbyMode
@@ -26,7 +34,7 @@ class StandbyMode
     private ?int $id = null;
 
     #[Vich\UploadableField(mapping: 'standby_targets', fileNameProperty: 'target')]
-    #[Assert\Image(mimeTypes: ['video/mp4', 'video/avi', 'video/wmv',])]
+    #[Assert\File(mimeTypes: ['video/mp4', 'video/avi', 'video/wmv',])]
     private ?File $targetFile = null;
 
     #[ORM\Column(type: 'string', nullable: true)]

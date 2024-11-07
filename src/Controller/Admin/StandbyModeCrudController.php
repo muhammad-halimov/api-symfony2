@@ -2,11 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\Field\VichFileField;
 use App\Controller\Admin\Field\VichImageField;
 use App\Entity\StandbyMode;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -32,7 +34,7 @@ class StandbyModeCrudController extends AbstractCrudController
         yield IdField::new('id', 'ID')
             ->hideOnForm();
 
-        yield VichImageField::new('targetFile', 'Файл')
+        yield VichFileField::new('targetFile', 'Файл')
             ->setHelp('
                 <div class="mt-3">
                     <span class="badge badge-info">*.mp4</span>
@@ -45,6 +47,13 @@ class StandbyModeCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setColumns(8);
 
+        yield VichFileField::new('target', 'Файл')
+            ->hideOnForm()
+            ->setColumns(8);
+
         yield BooleanField::new('turnOn', 'Показывать');
+
+        yield DateTimeField::new('updatedAt', 'Обновлено')
+            ->hideOnForm();
     }
 }

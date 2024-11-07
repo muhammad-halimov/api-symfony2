@@ -3,21 +3,38 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\TenantRepository;
 use DateTime;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: TenantRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new GetCollection(uriTemplate: 'tenants/search'),
+        new Get(),
+        new Patch(),
+    ],
+    normalizationContext: ['groups' => ['tenant:read']],
+    paginationEnabled: false
+)]
 class Tenant
 {
     use UpdatedAtTrait;
@@ -25,44 +42,53 @@ class Tenant
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logo = null;
 
     #[Vich\UploadableField(mapping: 'tenants_logos', fileNameProperty: 'image')]
     #[Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['tenant:read', 'category:read'])]
     private ?string $image = null;
 
     /**
      * @var Collection<int, MemberImages>
      */
     #[ORM\OneToMany(mappedBy: 'tenant', targetEntity: MemberImages::class, cascade: ['persist', 'remove'])]
+    #[Groups(['tenant:read', 'category:read'])]
     private Collection $photos;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    #[ORM\OneToOne(mappedBy: 'floor', targetEntity: Floor::class, cascade: ['persist', 'remove'])]
-    private Floor|int|null $floor = null;
+    #[ORM\ManyToOne(inversedBy: 'tenant')]
+    #[Groups(['tenant:read', 'category:read'])]
+    private ?Category $category = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    #[ORM\OneToOne(mappedBy: 'category', targetEntity: Category::class, cascade: ['persist', 'remove'])]
-    private Category|int|null $category = null;
+    #[ORM\ManyToOne(inversedBy: 'tenant')]
+    #[Groups(['tenant:read', 'category:read'])]
+    private ?Floor $floor = null;
 
     public function __construct()
     {
         $this->photos = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->category ? $this->category->__toString() : 'Нет обновления'; // Теперь использует __toString() из Updates
     }
 
     public function getId(): ?int
@@ -78,30 +104,6 @@ class Tenant
     public function setTitle(?string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getCategory(): Category|int|null
-    {
-        return $this->category;
-    }
-
-    public function setCategory(Category|int|null $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getFloor(): Floor|int|null
-    {
-        return $this->floor;
-    }
-
-    public function setFloor(Floor|int|null $floor): static
-    {
-        $this->floor = $floor;
 
         return $this;
     }
@@ -196,6 +198,30 @@ class Tenant
                 $photo->setTenant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getFloor(): ?Floor
+    {
+        return $this->floor;
+    }
+
+    public function setFloor(?Floor $floor): static
+    {
+        $this->floor = $floor;
 
         return $this;
     }

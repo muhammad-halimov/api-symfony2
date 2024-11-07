@@ -4,11 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichFileField;
 use App\Entity\Updates;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UpdatesCrudController extends AbstractCrudController
@@ -22,9 +25,16 @@ class UpdatesCrudController extends AbstractCrudController
     {
         return parent::configureCrud($crud)
             ->setEntityLabelInPlural('Обновления')
-            ->setEntityLabelInSingular('контент')
-            ->setPageTitle(Crud::PAGE_NEW, 'Добавление контента')
-            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение контента');
+            ->setEntityLabelInSingular('обновление')
+            ->setPageTitle(Crud::PAGE_NEW, 'Добавление обновления')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение обновления');
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions->remove(Crud::PAGE_INDEX, Action::EDIT);
+
+        return parent::configureActions($actions);
     }
 
     public function configureFields(string $pageName): iterable
@@ -32,7 +42,7 @@ class UpdatesCrudController extends AbstractCrudController
         yield IdField::new('id', 'ID')
             ->hideOnForm();
 
-        yield TextEditorField::new('description', 'Описание')
+        yield TextField::new('description', 'Описание')
             ->setColumns(8);
 
         yield VichFileField::new('targetFile', 'Архив с обновлением')
@@ -48,6 +58,9 @@ class UpdatesCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setColumns(8);
 
+        yield VichFileField::new('target', 'Архив с обновлением')
+            ->hideOnForm();
+
         yield TextField::new('version', 'Версия')
             ->setColumns(8)
             ->setRequired(true);
@@ -59,5 +72,12 @@ class UpdatesCrudController extends AbstractCrudController
                 'Стабильная версия' => 'stable',
             ])
             ->setRequired(true);
+
+        yield CollectionField::new('terminal', 'Терминалы')
+            ->onlyOnIndex()
+            ->useEntryCrudForm(TerminalCrudController::class);
+
+        yield DateTimeField::new('createdAt', 'Создана')
+            ->hideOnForm();
     }
 }

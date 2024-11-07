@@ -1,4 +1,7 @@
 api_platform:
+    eager_loading:
+        enabled: false
+
     # The title of the API.
     title: 'API title'
 
