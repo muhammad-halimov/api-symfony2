@@ -23,7 +23,7 @@ class HistoryImages
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?int $id = null;
 
     #[Vich\UploadableField(mapping: 'history_images', fileNameProperty: 'image')]
@@ -31,14 +31,14 @@ class HistoryImages
     private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?History $history = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?string $title = null;
 
     public function getId(): ?int

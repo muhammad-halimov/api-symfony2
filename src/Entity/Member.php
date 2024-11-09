@@ -17,16 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    operations: [
-        new GetCollection(uriTemplate: 'members/heroes', controller: ControllerHeroes::class),
-        new GetCollection(uriTemplate: 'members/harovchane', controller: ControllerHarovchane::class),
-        new GetCollection(),
-        new Get()
-    ],
-    normalizationContext: ['groups' => ['member:read']],
-    paginationEnabled: false
-)]
+//#[ApiResource(
+//    operations: [
+//        new GetCollection(uriTemplate: 'members/heroes', controller: ControllerHeroes::class),
+//        new GetCollection(uriTemplate: 'members/harovchane', controller: ControllerHarovchane::class),
+//        new GetCollection(),
+//        new Get()
+//    ],
+//    normalizationContext: ['groups' => ['member:read']],
+//    paginationEnabled: false
+//)]
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 class Member
 {
@@ -36,45 +36,45 @@ class Member
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $surname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $patronymic = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $biography = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?\DateTimeImmutable $endAt = null;
 
     /**
      * @var Collection<int, MemberAudio>
      */
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: MemberAudio::class, cascade: ['all'])]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private Collection $audios;
 
     /**
      * @var Collection<int, MemberVideo>
      */
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: MemberVideo::class, cascade: ['all'])]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private Collection $videos;
 
     #[ORM\Column(length: 255)]
@@ -84,14 +84,14 @@ class Member
      * @var Collection<int, MemberImages>
      */
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: MemberImages::class, cascade: ['all'])]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private Collection $images;
 
     /**
      * @var Collection<int, MemberPoetry>
      */
     #[ORM\OneToMany(mappedBy: 'member', targetEntity: MemberPoetry::class, cascade: ['all'])]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private Collection $poetry;
 
     public function __construct()

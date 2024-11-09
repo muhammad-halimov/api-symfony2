@@ -17,16 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    operations: [
-        new GetCollection(uriTemplate: 'history/heroes', controller: ControllerHistory::class),
-        new GetCollection(uriTemplate: 'history/harovsk', controller: ControllerHarovsk::class),
-        new GetCollection(),
-        new Get()
-    ],
-    normalizationContext: ['groups' => ['history:read']],
-    paginationEnabled: false
-)]
+//#[ApiResource(
+//    operations: [
+//        new GetCollection(uriTemplate: 'history/heroes', controller: ControllerHistory::class),
+//        new GetCollection(uriTemplate: 'history/harovsk', controller: ControllerHarovsk::class),
+//        new GetCollection(),
+//        new Get()
+//    ],
+//    normalizationContext: ['groups' => ['history:read']],
+//    paginationEnabled: false
+//)]
 #[ORM\Entity(repositoryClass: HistoryRepository::class)]
 class History
 {
@@ -36,22 +36,22 @@ class History
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, HistoryImages>
      */
     #[ORM\OneToMany(mappedBy: 'history', targetEntity: HistoryImages::class, cascade: ['all'])]
-    #[Groups(['history:read'])]
+//    #[Groups(['history:read'])]
     private Collection $images;
 
     public function __construct()

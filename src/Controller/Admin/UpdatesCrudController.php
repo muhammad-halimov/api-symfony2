@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichFileField;
 use App\Entity\Updates;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -35,6 +37,34 @@ class UpdatesCrudController extends AbstractCrudController
         $actions->remove(Crud::PAGE_INDEX, Action::EDIT);
 
         return parent::configureActions($actions);
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var Updates $entityInstance */
+        if ($entityInstance->getTerminal()->isEmpty()) {
+            parent::deleteEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Нельзя удалить обновление, к нему привязаны терминалы.');
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $updates = new ArrayCollection($entityManager->getRepository(Updates::class)->findAll());
+
+        /** @var Updates $entityInstance */
+        $filtered = $updates->filter(function (Updates $update) use ($entityInstance) {
+            return $update->getVersion() >= $entityInstance->getVersion();
+        });
+
+        if ($filtered->isEmpty()) {
+            parent::persistEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Версию меньше или равную текущей - поставить нельзя.');
     }
 
     public function configureFields(string $pageName): iterable

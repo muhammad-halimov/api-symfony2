@@ -23,7 +23,7 @@ class MemberVideo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?int $id = null;
 
     #[Vich\UploadableField(mapping: 'member_video', fileNameProperty: 'video')]
@@ -31,14 +31,14 @@ class MemberVideo
     private ?File $videoFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $video = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]
     private ?Member $member = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $title = null;
 
     public function getId(): ?int

@@ -54,7 +54,7 @@ class Category
     /**
      * @var Collection<int, Tenant>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Tenant::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Tenant::class, cascade: ['all'])]
     #[Groups(['category:read'])]
     private Collection $tenant;
 

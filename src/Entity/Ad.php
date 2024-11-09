@@ -66,14 +66,30 @@ class Ad
 
     public function optionsToString(): ?string
     {
-        $iter = '';
+        // Инициализируем массив для хранения строковых представлений каждого свойства
+        $result = [];
 
+        // Проходим по всем опциям
         foreach ($this->options as $option) {
-            $iter.=$option->getId();
+            $id = $option->getId();
+            $startDate = $option->getBeginning()->format('d-m-Y, H:i');
+            $endDate = $option->getEnding()->format('d-m-Y, H:i');
+            $displayOrder = $option->getShowOrder();
+            $terminals = $option->getTerminal() ? 'Да' : 'Нет';
+
+            // Формируем строку для текущей опции
+            $result[] = "
+                $id) Дата начала - $startDate
+                Дата конца - $endDate
+                Порядок отображения - $displayOrder
+                Терминалы - $terminals
+            ";
         }
 
-        return $iter;
+        // Объединяем все части в одну строку
+        return implode("\n", $result);
     }
+
 
     public function getId(): ?int
     {

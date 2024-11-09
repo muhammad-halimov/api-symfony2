@@ -19,19 +19,19 @@ class MemberPoetry
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('member:read')]
+//    #[Groups('member:read')]
     private ?string $text = null;
 
     #[ORM\ManyToOne(inversedBy: 'poetry')]

@@ -38,7 +38,7 @@ class AdCrudController extends AbstractCrudController
             ->useEntryCrudForm(AdSettingCrudController::class)
             ->setColumns(8);
 
-        yield TextEditorField::new('optionsToString', 'Настройки')
+        yield TextEditorField::new('optionsToString', 'Информация')
             ->hideOnForm()
             ->setColumns(8);
 

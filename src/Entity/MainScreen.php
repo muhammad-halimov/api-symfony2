@@ -13,13 +13,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection()
-    ],
-    paginationEnabled: false
-)]
+//#[ApiResource(
+//    operations: [
+//        new Get(),
+//        new GetCollection()
+//    ],
+//    paginationEnabled: false
+//)]
 #[ORM\Entity(repositoryClass: MainScreenRepository::class)]
 class MainScreen
 {

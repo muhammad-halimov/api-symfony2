@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class FloorCrudController extends AbstractCrudController
@@ -52,7 +53,7 @@ class FloorCrudController extends AbstractCrudController
         yield IdField::new('id', 'ID')
             ->hideOnForm();
 
-        yield TextField::new('floor', 'Этаж')
+        yield IntegerField::new('floor', 'Этаж')
             ->setRequired(true)
             ->setColumns(5);
 

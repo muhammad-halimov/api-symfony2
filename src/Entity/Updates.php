@@ -60,7 +60,7 @@ class Updates
     /**
      * @var Collection<int, Terminal>
      */
-    #[ORM\OneToMany(mappedBy: 'updates', targetEntity: Terminal::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'updates', targetEntity: Terminal::class)]
     private Collection $terminal;
 
     public function __toString(): string

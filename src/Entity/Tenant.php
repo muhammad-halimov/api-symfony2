@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -22,7 +25,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: TenantRepository::class)]
+#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: TenantRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 #[ApiResource(
@@ -30,7 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new GetCollection(),
         new GetCollection(uriTemplate: 'tenants/search'),
         new Get(),
-        new Patch(),
+        new Patch(acceptPatch: true),
     ],
     normalizationContext: ['groups' => ['tenant:read']],
     paginationEnabled: false
@@ -74,11 +77,9 @@ class Tenant
     private Collection $photos;
 
     #[ORM\ManyToOne(inversedBy: 'tenant')]
-    #[Groups(['tenant:read', 'category:read'])]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'tenant')]
-    #[Groups(['tenant:read', 'category:read'])]
     private ?Floor $floor = null;
 
     public function __construct()
@@ -128,18 +129,6 @@ class Tenant
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(?string $logo): static
-    {
-        $this->logo = $logo;
 
         return $this;
     }
