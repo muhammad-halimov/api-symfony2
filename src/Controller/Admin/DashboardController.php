@@ -29,8 +29,11 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        return $this->redirect($adminUrlGenerator->setController(CategoryCrudController::class)->generateUrl());
+
+        return $this->redirect(url: $this->container
+            ->get(AdminUrlGenerator::class)
+            ->setController(CategoryCrudController::class)
+            ->generateUrl());
     }
 
     public function configureDashboard(): Dashboard

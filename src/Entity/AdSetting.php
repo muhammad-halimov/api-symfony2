@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\AdSettingRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -24,11 +25,11 @@ class AdSetting
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['ads:read'])]
-    private ?\DateTimeInterface $beginning = null;
+    private ?DateTimeInterface $beginning = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['ads:read'])]
-    private ?\DateTimeInterface $ending = null;
+    private ?DateTimeInterface $ending = null;
 
     /**
      * @var Collection<int, Terminal>
@@ -53,24 +54,24 @@ class AdSetting
         return $this->id;
     }
 
-    public function getBeginning(): ?\DateTimeInterface
+    public function getBeginning(): ?DateTimeInterface
     {
         return $this->beginning;
     }
 
-    public function setBeginning(?\DateTimeInterface $beginning): static
+    public function setBeginning(?DateTimeInterface $beginning): static
     {
         $this->beginning = $beginning;
 
         return $this;
     }
 
-    public function getEnding(): ?\DateTimeInterface
+    public function getEnding(): ?DateTimeInterface
     {
         return $this->ending;
     }
 
-    public function setEnding(?\DateTimeInterface $ending): static
+    public function setEnding(?DateTimeInterface $ending): static
     {
         $this->ending = $ending;
 
