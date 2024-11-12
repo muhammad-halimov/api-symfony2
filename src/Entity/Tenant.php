@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use AllowDynamicProperties;
-use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -191,6 +189,12 @@ class Tenant
         return $this;
     }
 
+    #[Groups(['tenant:read'])]
+    public function getCategoryId(): int
+    {
+        return $this->category->getId();
+    }
+
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -201,6 +205,12 @@ class Tenant
         $this->category = $category;
 
         return $this;
+    }
+
+    #[Groups(['tenant:read'])]
+    public function getFloorId(): int
+    {
+        return $this->floor->getId();
     }
 
     public function getFloor(): ?Floor
