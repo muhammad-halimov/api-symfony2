@@ -3,9 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\Admin\AdSettingCrudController;
 use App\Controller\Api\Ad\AdSettingsController;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\AdRepository;

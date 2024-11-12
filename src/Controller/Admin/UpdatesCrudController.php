@@ -29,7 +29,8 @@ class UpdatesCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Обновления')
             ->setEntityLabelInSingular('обновление')
             ->setPageTitle(Crud::PAGE_NEW, 'Добавление обновления')
-            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение обновления');
+            ->setPageTitle(Crud::PAGE_EDIT, 'Изменение обновления')
+            ->showEntityActionsInlined();
     }
 
     public function configureActions(Actions $actions): Actions
