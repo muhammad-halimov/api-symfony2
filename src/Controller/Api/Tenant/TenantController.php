@@ -18,12 +18,12 @@ class TenantController extends AbstractController
 
     public function __invoke(#[MapQueryParameter] ?string $word): JsonResponse
     {
-        $renters = $this->tenantRepository->findBy(['title' => $word]);
+        $tenants = $this->tenantRepository->findBy(['title' => $word]);
 
-        if (!$renters) {
+        if (!$tenants) {
             throw $this->createNotFoundException('Tenants not found');
         }
 
-        return $this->json($renters, 200, [], ['groups' => 'tenant:read']);
+        return $this->json($tenants, 200, [], ['groups' => 'tenant:read']);
     }
 }
