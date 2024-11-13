@@ -7,19 +7,18 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
-
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use App\Controller\Api\Tenant\TenantController;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\TenantRepository;
 use DateTime;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
-
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -29,7 +28,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new GetCollection(uriTemplate: 'tenants/search'),
+        new GetCollection(
+            uriTemplate: '/tenants/search',
+            controller: TenantController::class,
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'word',
+                        in: 'query',
+                        required: false,
+                        schema: ['type' => 'string']
+                    )
+                ]
+            )
+        ),
         new Get(),
         new Patch(acceptPatch: true),
     ],

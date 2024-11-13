@@ -61,7 +61,6 @@ class TenantCrudController extends AbstractCrudController
                     <span class="badge badge-info">*.jpg</span>
                     <span class="badge badge-info">*.jpeg</span>
                     <span class="badge badge-info">*.png</span>
-                    <span class="badge badge-info">*.webp</span>
                 </div>
             ')
             ->onlyOnForms()

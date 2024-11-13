@@ -37,9 +37,9 @@ class AdSetting
     #[ORM\OneToMany(mappedBy: 'adSetting', targetEntity: Terminal::class, cascade: ['persist', 'remove'])]
     private Collection $terminal;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0, nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     #[Groups(['ads:read'])]
-    private ?string $showOrder = null;
+    private ?int $showOrder = null;
 
     #[ORM\ManyToOne(inversedBy: 'options')]
     private ?Ad $ad = null;

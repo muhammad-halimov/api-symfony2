@@ -70,24 +70,32 @@ class Ad
         // Проходим по всем опциям
         foreach ($this->options as $option) {
             $id = $option->getId();
-            $startDate = $option->getBeginning()->format('d-m-Y, H:i');
-            $endDate = $option->getEnding()->format('d-m-Y, H:i');
+
+            // Получаем даты начала и окончания
+            $beginning = $option->getBeginning();
+            $ending = $option->getEnding();
+
+            // Проверяем, не null ли они, перед вызовом format
+            $startDate = $beginning ? $beginning->format('d-m-Y, H:i') : 'Не указано';
+            $endDate = $ending ? $ending->format('d-m-Y, H:i') : 'Не указано';
+
             $displayOrder = $option->getShowOrder();
             $terminals = $option->getTerminal() ? 'Да' : 'Нет';
 
             // Формируем строку для текущей опции
-            $result[] = "
-                $id) Дата начала - $startDate
-                Дата конца - $endDate
-                Порядок отображения - $displayOrder
-                Терминалы - $terminals
-            ";
+            $result[] = sprintf(
+                "ID: %d, Начало: %s, Конец: %s, Порядок отображения: %d, Терминалы: %s",
+                $id,
+                $startDate,
+                $endDate,
+                $displayOrder,
+                $terminals
+            );
         }
 
         // Объединяем все части в одну строку
         return implode("\n", $result);
     }
-
 
     public function getId(): ?int
     {

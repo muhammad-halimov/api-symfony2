@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichImageField;
 use App\Entity\Floor;
+use App\Entity\Updates;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -34,6 +35,17 @@ class FloorCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('этаж')
             ->setPageTitle(Crud::PAGE_NEW, 'Добавление этажа')
             ->setPageTitle(Crud::PAGE_EDIT, 'Изменение этажа');
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var Floor $entityInstance */
+        if ($entityInstance->getTenant()->isEmpty()) {
+            parent::deleteEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Нельзя удалить этаж, к нему привязаны арендаторы.');
     }
 
     public function configureActions(Actions $actions): Actions

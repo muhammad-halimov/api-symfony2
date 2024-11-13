@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichImageField;
 use App\Entity\Category;
+use App\Entity\Updates;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -25,6 +27,17 @@ class CategoryCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('катергорию')
             ->setPageTitle(Crud::PAGE_NEW, 'Добавление категории')
             ->setPageTitle(Crud::PAGE_EDIT, 'Изменение категории');
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var Category $entityInstance */
+        if ($entityInstance->getTenant()->isEmpty()) {
+            parent::deleteEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Нельзя удалить категорию, к нему привязаны арендаторы.');
     }
 
     public function configureFields(string $pageName): iterable
