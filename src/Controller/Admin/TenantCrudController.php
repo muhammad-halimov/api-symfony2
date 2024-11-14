@@ -74,7 +74,8 @@ class TenantCrudController extends AbstractCrudController
 
         yield CollectionField::new('photos', 'Фотографии')
             ->onlyOnForms()
-            ->useEntryCrudForm(MemberImagesCrudController::class);
+            ->useEntryCrudForm(MemberImagesCrudController::class)
+            ->setColumns(8);
 
         yield DateTimeField::new('updatedAt', 'Обновлено')
             ->hideOnForm();
