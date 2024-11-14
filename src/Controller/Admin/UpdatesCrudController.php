@@ -57,7 +57,7 @@ class UpdatesCrudController extends AbstractCrudController
 
         /** @var Updates $entityInstance */
         $filtered = $updates->filter(function (Updates $update) use ($entityInstance) {
-            return $update->getVersion() >= $entityInstance->getVersion();
+            return $update->getVersion() == $entityInstance->getVersion();
         });
 
         if ($filtered->isEmpty()) {

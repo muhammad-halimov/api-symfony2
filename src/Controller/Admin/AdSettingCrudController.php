@@ -23,15 +23,14 @@ class AdSettingCrudController extends AbstractCrudController
         yield IdField::new('id', 'ID')
             ->hideOnForm();
 
-        yield DateTimeField::new('beginning', 'Дата начала')
+        yield DateTimeField::new('beginning', 'Начало')
             ->setColumns(6);
 
-        yield DateTimeField::new('ending', 'Дата начала')
+        yield DateTimeField::new('ending', 'Конец')
             ->setColumns(6);
 
         yield IntegerField::new('showOrder', 'Порядок')
-            ->setColumns(6)
-            ->setHelp('В секундах');
+            ->setColumns(6);
 
         yield AssociationField::new('terminal', 'Терминал')
             ->setColumns(6)

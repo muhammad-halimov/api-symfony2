@@ -2,37 +2,43 @@
 
 namespace App\Controller\Api\Ad;
 
-use App\Repository\AdSettingRepository;
-use Exception;
+use App\Repository\AdRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Contracts\Service\Attribute\Required;
 
 #[AsController]
+
 class AdSettingsController extends AbstractController
 {
-    public function __construct(private readonly AdSettingRepository $adSettingRepository)
-    {}
+    #[Required]
+    public AdRepository $adRepository;
 
-    /**
-     * @throws Exception
-     */
+
     public function __invoke(): JsonResponse
     {
-        // Получаем все настройки рекламы
-        $adSettings = $this->adSettingRepository->findAll();
+        $advertisements = new ArrayCollection($this->adRepository->findAll());
+        $properties = new ArrayCollection();
 
-        // Проверяем, найдены ли настройки
-        if (!$adSettings) {
-            throw $this->createNotFoundException('AdSettings not found');
+        if ($advertisements->isEmpty())
+            throw $this->createNotFoundException('Adsettings not found');
+
+
+        for ($i = 0; $i < $advertisements->count(); $i++) {
+            $propertiesInAdvertisement = $advertisements->get($i)->getOptions();
+
+            for ($j = 0; $j < $propertiesInAdvertisement->count(); $j++)
+                $properties->add($propertiesInAdvertisement->get($j));
         }
 
-        // Сортируем настройки по полю showOrder
-        usort($adSettings, function($a, $b) {
-            return $a->getShowOrder() <=> $b->getShowOrder(); // Используем оператор "космического корабля"
+        $properties = $properties->toArray();
+
+        usort($properties, function($item1, $item2) {
+            return $item1->getShowOrder() <=> $item2->getShowOrder();
         });
 
-        // Возвращаем настройки в формате JSON
-        return $this->json($adSettings, 200, [], ['groups' => 'ads:read']);
+        return $this->json($properties, 200, [], ['groups' => 'ads:read']);
     }
 }

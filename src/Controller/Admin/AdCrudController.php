@@ -29,17 +29,6 @@ class AdCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_EDIT, 'Изменение рекламы');
     }
 
-    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
-        /** @var Ad $entityInstance */
-        if ($entityInstance->getOptions()->isEmpty()) {
-            parent::deleteEntity($entityManager, $entityInstance);
-            return;
-        }
-
-        $this->addFlash('warning', 'Нельзя удалить рекламу, к нему привязаны опции.');
-    }
-
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id', 'ID')
