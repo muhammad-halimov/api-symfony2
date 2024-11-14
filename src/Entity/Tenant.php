@@ -36,8 +36,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                     new Parameter(
                         name: 'word',
                         in: 'query',
-                        required: false,
-                        schema: ['type' => 'string']
                     )
                 ]
             )
